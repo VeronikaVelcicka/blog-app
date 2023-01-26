@@ -1,0 +1,32 @@
+.h {
+  font-weight: $fw-semi-bold;
+}
+
+.h--primary {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  line-height: 2.6rem;
+
+  @include more-than(md) {
+    margin-bottom: 2.5rem;
+    font-size: 2.4rem;
+    line-height: 3rem;
+  }
+
+  @include more-than(xl) {
+    margin-bottom: 3rem;
+    font-size: 2.6rem;
+    line-height: 3.2rem;
+  }
+}
+
+.h--secondary {
+  margin-bottom: 0;
+  font-size: 1.6rem;
+  line-height: 2rem;
+
+  @include more-than(md) {
+    font-size: 1.8rem;
+    line-height: 2.2rem;
+  }
+}
