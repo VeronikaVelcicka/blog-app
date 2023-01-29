@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { HttpClient } from "@/common/http/http-client";
+import { notify } from "@kyvg/vue3-notification";
 
 export const useTagsStore = defineStore("tags", {
   state: () => {
@@ -9,8 +10,12 @@ export const useTagsStore = defineStore("tags", {
     };
   },
   actions: {
-    fetchAllItems() {
+    fetchAllItems({ refetch = true } = {}) {
       return new Promise((resolve, reject) => {
+        if (!refetch && this.items.length) {
+          resolve();
+          return;
+        }
         HttpClient.get(`/tag`)
           .then((response) => {
             this.items = response.data;
@@ -54,6 +59,10 @@ export const useTagsStore = defineStore("tags", {
             } else {
               this.items[indexOfItem] = data;
             }
+            notify({
+              type: "success",
+              text: "Tag byl aktualizován.",
+            });
             resolve(this.itemToEdit);
           })
           .catch((error) => {
@@ -68,6 +77,10 @@ export const useTagsStore = defineStore("tags", {
           .then((response) => {
             const data = response.data;
             this.items.push(data);
+            notify({
+              type: "success",
+              text: "Post byl vytvořen.",
+            });
             resolve(data);
           })
           .catch((error) => {

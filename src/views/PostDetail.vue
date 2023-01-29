@@ -15,8 +15,14 @@
           <BaseButton
             text="Upravit"
             custom-class="btn--primary-outlined"
+            :use-icon="true"
             @click="isEdit = true"
-          />
+          >
+            <template #ico>
+              <!-- eslint-disable -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="m9.328 2.527 3.05 3.051-7.722 7.727-3.05-3.055Zm5.367-.734L13.332.43a1.353 1.353 0 0 0-1.906 0L10.12 1.734l3.05 3.051 1.524-1.52a1.042 1.042 0 0 0 0-1.472ZM.008 14.539a.349.349 0 0 0 .422.414l3.398-.824-3.05-3.05Zm0 0" style="stroke:none;fill-rule:nonzero;fill:currentColor;fill-opacity:1"/></svg>              <!-- eslint-enable -->
+            </template>
+          </BaseButton>
         </template>
       </TitleHeader>
 
@@ -94,7 +100,7 @@ export default {
     this.status = "loading";
     Promise.all([
       this.blogs.fetchItem(this.$route.params.idPost),
-      this.tags.fetchAllItems(),
+      this.tags.fetchAllItems({ refetch: false }),
     ])
       .then(() => {
         this.blogTags = this.tags.items.filter((item) =>

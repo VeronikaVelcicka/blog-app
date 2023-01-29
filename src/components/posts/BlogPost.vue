@@ -71,7 +71,7 @@ export default {
   },
 
   created() {
-    this.tags.fetchAllItems().then(() => {
+    this.tags.fetchAllItems({ refetch: false }).then(() => {
       this.blogTags = this.tags.items.filter((item) =>
         this.item.tags.includes(item.id)
       );

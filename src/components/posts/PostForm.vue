@@ -177,7 +177,7 @@ export default {
       this.setInitialData();
     }
 
-    this.tags.fetchAllItems().then(() => {
+    this.tags.fetchAllItems({ refetch: false }).then(() => {
       if (this.$route.params.idPost) {
         this.filterTags();
       } else this.tagsArr = this.tags.items;

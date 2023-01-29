@@ -12,6 +12,7 @@
     "stylelint": "stylelint src/**/*.{vue,scss} --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@kyvg/vue3-notification": "^2.8.0",
     "axios": "^1.2.5",
     "pinia": "^2.0.28",
     "vue": "^3.2.45",

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { HttpClient } from "@/common/http/http-client";
+import { notify } from "@kyvg/vue3-notification";
 
 export const useBlogsStore = defineStore("blogs", {
   state: () => {
@@ -56,6 +57,10 @@ export const useBlogsStore = defineStore("blogs", {
             } else {
               this.items[indexOfItem] = data;
             }
+            notify({
+              type: "success",
+              text: "Post byl aktualizován.",
+            });
             resolve(this.itemToEdit);
           })
           .catch((error) => {
@@ -70,6 +75,10 @@ export const useBlogsStore = defineStore("blogs", {
           .then((response) => {
             const data = response.data;
             this.items.push(data);
+            notify({
+              type: "success",
+              text: "Post byl vytvořen.",
+            });
             resolve(data);
           })
           .catch((error) => {
@@ -108,6 +117,10 @@ export const useBlogsStore = defineStore("blogs", {
             } else {
               this.items[indexOfItem] = data;
             }
+            notify({
+              type: "success",
+              text: "Tag byl přidán.",
+            });
             resolve(this.itemToEdit);
           })
           .catch((error) => {

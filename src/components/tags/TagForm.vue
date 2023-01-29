@@ -3,17 +3,6 @@
   <div class="form">
     <div class="form__item">
       <BaseInput
-        id="id"
-        v-model="formData.id"
-        title="Id"
-        type="number"
-        name="title"
-        :required="true"
-        :error="fieldErrors.id"
-      />
-    </div>
-    <div class="form__item">
-      <BaseInput
         id="detail"
         v-model="formData.name"
         title="Název"
@@ -66,7 +55,6 @@ export default {
     return {
       isLoading: false,
       formData: {
-        id: "",
         name: "",
       },
       fieldErrors: {},
@@ -83,7 +71,6 @@ export default {
   },
 
   created() {
-    console.log(this.$route.params.idTag);
     if (this.$route.params.idTag) {
       this.setInitialData();
     }
@@ -93,7 +80,6 @@ export default {
     setInitialData() {
       this.tags.fetchItem(this.$route.params.idTag).then(() => {
         this.formData = {
-          id: this.tags.itemToEdit.id,
           name: this.tags.itemToEdit.name,
         };
       });
@@ -123,11 +109,9 @@ export default {
       this.isLoading = true;
 
       this.clearErrors();
-      this.checkRequired("id");
       this.checkRequired("name");
 
       if (!this.isError) {
-        this.formData.id = parseInt(this.formData.id);
         this.tags
           .createItem(this.formData)
           .then(() => {

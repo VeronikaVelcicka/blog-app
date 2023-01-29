@@ -2,6 +2,7 @@
   <main>
     <div class="container">
       <router-view />
+      <notifications position="bottom right" />
     </div>
   </main>
 </template>

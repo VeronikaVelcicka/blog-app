@@ -4,8 +4,15 @@
       <BaseButton
         :text="'Nový tag'"
         custom-class="btn--primary"
+        :use-icon="true"
         @click="goToCreate"
-      />
+      >
+        <template #ico>
+          <!-- eslint-disable -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="14.234" height="14.234" viewBox="0 0 14.234 14.234"><path id="plus-regular" d="M30.234,55.127a.819.819,0,0,1-.821.821H23.938v5.475a.821.821,0,1,1-1.642,0V55.948H16.821a.821.821,0,1,1,0-1.642H22.3V48.831a.821.821,0,0,1,1.642,0v5.475h5.475A.821.821,0,0,1,30.234,55.127Z" transform="translate(-16 -48.01)" fill="currentColor"/></svg>
+          <!-- eslint-enable -->
+        </template>
+      </BaseButton>
     </template>
   </TitleHeader>
 
