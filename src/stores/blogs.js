@@ -42,9 +42,9 @@ export const useBlogsStore = defineStore("blogs", {
       });
     },
 
-    updateItem(id) {
+    updateItem(id, data) {
       return new Promise((resolve, reject) => {
-        HttpClient.put(`/blog/${id}`)
+        HttpClient.put(`/blog/${id}`, data)
           .then((response) => {
             const data = response.data;
             this.itemToEdit = data;
@@ -55,6 +55,20 @@ export const useBlogsStore = defineStore("blogs", {
               this.items[indexOfItem] = data;
             }
             resolve(this.itemToEdit);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+
+    createItem(id, data) {
+      return new Promise((resolve, reject) => {
+        HttpClient.post(`/blog/${id}`, data)
+          .then((response) => {
+            const data = response.data;
+            this.items.push(data);
+            resolve(data);
           })
           .catch((error) => {
             reject(error);

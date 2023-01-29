@@ -13,9 +13,27 @@ const router = createRouter({
       component: () => import("@/views/Blog.vue"),
     },
     {
-      path: "/blog/:idBlog",
+      path: "/blog/:idPost",
       name: "blog-detail",
-      component: () => import("@/views/BlogDetail.vue"),
+      component: () => import("@/views/PostDetail.vue"),
+    },
+    {
+      path: "/blog/create",
+      name: "blog-create",
+      component: () => import("@/views/PostCreate.vue"),
+    },
+    {
+      path: "/404",
+      name: "not-found",
+      meta: {
+        layout: "app-layout",
+        title: "Not found",
+      },
+      component: () => import("@/views/PageNotFound.vue"),
+    },
+    {
+      path: "/:catchAll(.*)",
+      redirect: "/404",
     },
   ],
 });

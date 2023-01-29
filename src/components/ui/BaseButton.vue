@@ -1,16 +1,31 @@
 <template>
-  <button class="btn" :class="customClass">
+  <button class="btn" :class="customClass" :disabled="isLoading">
     <span v-if="useIcon" class="btn__ico">
       <slot name="ico" />
     </span>
     <span class="btn__text" :class="{ 'btn__text--ico': useIcon }">
       {{ text }}
     </span>
+    <Transition>
+      <span v-if="isLoading" class="spinner-box spinner-box--btn">
+        <Spinner />
+      </span>
+    </Transition>
   </button>
 </template>
 
 <script>
+import { defineAsyncComponent } from "vue";
+
+const Spinner = defineAsyncComponent(() =>
+  import("@/components/ui/Spinner.vue")
+);
+
 export default {
+  components: {
+    Spinner,
+  },
+
   props: {
     text: {
       type: String,
@@ -21,6 +36,10 @@ export default {
       default: null,
     },
     useIcon: {
+      type: Boolean,
+      default: false,
+    },
+    isLoading: {
       type: Boolean,
       default: false,
     },
@@ -44,6 +63,17 @@ export default {
 
   &:hover {
     color: $c-text;
+    background-color: transparent;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    color: $c-primary;
+    background-color: transparent;
+    pointer-events: none;
+  }
+
+  &:hover:disabled {
     background-color: transparent;
   }
 }

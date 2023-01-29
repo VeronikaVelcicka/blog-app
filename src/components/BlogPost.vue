@@ -32,7 +32,7 @@ export default {
 
   methods: {
     goToDetail(id) {
-      this.$router.push({ name: "blog-detail", params: { idBlog: id } });
+      this.$router.push({ name: "blog-detail", params: { idPost: id } });
     },
   },
 };
