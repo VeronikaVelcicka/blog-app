@@ -1,16 +1,16 @@
 <template>
-  <PostForm />
+  <TagForm />
 </template>
 
 <script>
 import { defineAsyncComponent } from "vue";
 
-const PostForm = defineAsyncComponent(() =>
-  import("@/components/posts/PostForm.vue")
+const TagForm = defineAsyncComponent(() =>
+  import("@/components/tags/TagForm.vue")
 );
 
 export default {
-  components: { PostForm },
+  components: { TagForm },
 };
 </script>
 

@@ -1,12 +1,18 @@
 <template>
-  <div class="article" @click="goToDetail(item.id)">
+  <div class="article">
     <img :src="item.thumbnail" class="article__thumb" :alt="item.title" />
     <div class="article__text-box">
       <h2 class="article__title">
         {{ item.title }}
       </h2>
+      <PostTags :tags="blogTags" @click="filter($event)" />
+      <p class="article__subtitle">{{ item.detail }}</p>
       <div class="text-center">
-        <BaseButton :text="'Přečíst'" custom-class="btn--primary-outlined" />
+        <BaseButton
+          :text="'Přečíst'"
+          custom-class="btn--primary-outlined"
+          @click="goToDetail(item.id)"
+        />
       </div>
     </div>
   </div>
@@ -14,15 +20,22 @@
 
 <script>
 import { defineAsyncComponent } from "vue";
+import { useBlogsStore } from "@/stores/blogs";
+import { useTagsStore } from "@/stores/tags";
 
 const BaseButton = defineAsyncComponent(() =>
   import("@/components/ui/BaseButton.vue")
+);
+const PostTags = defineAsyncComponent(() =>
+  import("@/components/ui/PostTags.vue")
 );
 
 export default {
   components: {
     BaseButton,
+    PostTags,
   },
+
   props: {
     item: {
       type: Object,
@@ -30,10 +43,39 @@ export default {
     },
   },
 
+  setup() {
+    const blogs = useBlogsStore();
+    const tags = useTagsStore();
+
+    return {
+      blogs,
+      tags,
+    };
+  },
+
+  data() {
+    return {
+      blogTags: [],
+    };
+  },
+
   methods: {
     goToDetail(id) {
       this.$router.push({ name: "blog-detail", params: { idPost: id } });
     },
+
+    filter(tag) {
+      Object.assign(this.blogs.tag, tag);
+      this.blogs.searchByTag();
+    },
+  },
+
+  created() {
+    this.tags.fetchAllItems().then(() => {
+      this.blogTags = this.tags.items.filter((item) =>
+        this.item.tags.includes(item.id)
+      );
+    });
   },
 };
 </script>

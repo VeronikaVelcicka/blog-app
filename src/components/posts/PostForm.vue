@@ -1,5 +1,6 @@
 <template>
   <TitleHeader :title="getTitle" />
+  <PostTags :tags="activeTags" @click="filter($event)" />
   <div class="form">
     <div class="form__item">
       <BaseInput
@@ -25,8 +26,8 @@
     </div>
     <div class="form__item">
       <BaseSelect
-        title="Tagy"
-        :options="tags"
+        title="Tag"
+        :options="tagsArr"
         :modelValue="formData.tags"
         customClass="input__field--arrow u-bc-light"
         placeholder="Vyberte možnost"
@@ -93,6 +94,7 @@
 <script>
 import { defineAsyncComponent } from "vue";
 import { useBlogsStore } from "@/stores/blogs";
+import { useTagsStore } from "@/stores/tags";
 
 const BaseButton = defineAsyncComponent(() =>
   import("@/components/ui/BaseButton.vue")
@@ -109,9 +111,13 @@ const BaseTextarea = defineAsyncComponent(() =>
 const TitleHeader = defineAsyncComponent(() =>
   import("@/components/ui/TitleHeader.vue")
 );
+const PostTags = defineAsyncComponent(() =>
+  import("@/components/ui/PostTags.vue")
+);
 
 export default {
   components: {
+    PostTags,
     BaseTextarea,
     BaseButton,
     BaseInput,
@@ -121,9 +127,11 @@ export default {
 
   setup() {
     const blogs = useBlogsStore();
+    const tags = useTagsStore();
 
     return {
       blogs,
+      tags,
     };
   },
 
@@ -131,6 +139,7 @@ export default {
     return {
       isLoading: false,
       formData: {
+        id: null,
         title: "",
         detail: "",
         text: "",
@@ -138,9 +147,21 @@ export default {
         thumbnail: "",
         tags: "",
       },
+      defaultData: {},
       fieldErrors: {},
       isError: false,
+      tagsArr: [],
+      activeTags: [],
     };
+  },
+
+  watch: {
+    "blogs.tagsReload": {
+      deep: true,
+      handler() {
+        this.filterTags();
+      },
+    },
   },
 
   computed: {
@@ -155,12 +176,25 @@ export default {
     if (this.$route.params.idPost) {
       this.setInitialData();
     }
+
+    this.tags.fetchAllItems().then(() => {
+      if (this.$route.params.idPost) {
+        this.filterTags();
+      } else this.tagsArr = this.tags.items;
+    });
   },
 
   methods: {
     setInitialData() {
       this.blogs.fetchItem(this.$route.params.idPost).then(() => {
         this.formData = {
+          title: this.blogs.itemToEdit.title,
+          detail: this.blogs.itemToEdit.detail,
+          text: this.blogs.itemToEdit.text,
+          image: this.blogs.itemToEdit.image,
+          thumbnail: this.blogs.itemToEdit.thumbnail,
+        };
+        this.defaultData = {
           title: this.blogs.itemToEdit.title,
           detail: this.blogs.itemToEdit.detail,
           text: this.blogs.itemToEdit.text,
@@ -180,14 +214,33 @@ export default {
 
     editPost() {
       this.isLoading = true;
-      this.blogs
-        .updateItem(parseInt(this.$route.params.idPost), this.formData)
-        .then(() => {
-          this.isLoading = false;
-        })
-        .catch(() => {
-          this.isLoading = false;
-        });
+
+      this.clearErrors();
+      this.checkRequired("title");
+      this.checkRequired("detail");
+      this.checkRequired("text");
+
+      if (
+        JSON.stringify(this.defaultData) !== JSON.stringify(this.formData) &&
+        !this.isError
+      ) {
+        this.blogs
+          .updateItem(parseInt(this.$route.params.idPost), this.formData)
+          .then(() => {
+            this.isLoading = false;
+          })
+          .catch(() => {
+            this.isLoading = false;
+          });
+      } else {
+        this.isLoading = false;
+      }
+
+      if (this.formData.tags) {
+        this.blogs
+          .addTag(this.$route.params.idPost, this.formData.tags)
+          .then(() => (this.blogs.tagsReload = !this.blogs.tagsReload));
+      }
     },
 
     createPost() {
@@ -201,9 +254,10 @@ export default {
 
       if (!this.isError) {
         this.blogs
-          .createItem(parseInt(this.$route.params.idPost), this.formData)
+          .createItem(this.formData)
           .then(() => {
             this.isLoading = false;
+            this.$router.push({ name: "blog" });
           })
           .catch(() => {
             this.isLoading = false;
@@ -229,6 +283,20 @@ export default {
         tags: "",
       };
     },
+
+    filter(tag) {
+      Object.assign(this.blogs.tag, tag);
+      this.$router.push({ name: "blog" });
+    },
+
+    filterTags() {
+      this.tagsArr = this.tags.items.filter(
+        ({ id }) => !this.blogs.itemToEdit.tags.includes(id)
+      );
+      this.activeTags = this.tags.items.filter(({ id }) =>
+        this.blogs.itemToEdit.tags.includes(id)
+      );
+    },
   },
 };
 </script>
@@ -238,11 +306,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   padding-bottom: 2rem;
-  margin: 0 -1.5rem;
-
-  @include more-than(lg) {
-    margin: 0 -1.5rem;
-  }
+  margin: 6rem -1.5rem 0;
 }
 
 .form__item {

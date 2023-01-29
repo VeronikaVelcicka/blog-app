@@ -2,6 +2,7 @@
   <div class="input">
     <label v-if="$attrs.title" :for="$attrs.id" class="input__label">
       {{ $attrs.title }}
+      <span v-if="required" class="input__required">*</span>
     </label>
     <textarea
       :id="id"
@@ -116,6 +117,10 @@ textarea::placeholder {
 
 .textarea--long {
   height: 35rem;
+}
+
+.input__required {
+  color: red;
 }
 
 .error {

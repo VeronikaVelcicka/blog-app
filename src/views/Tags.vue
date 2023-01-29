@@ -1,25 +1,13 @@
 <template>
-  <TitleHeader title="Blog">
+  <TitleHeader title="Tagy">
     <template #button>
-      <div class="d-flex gap-1">
-        <BaseButton
-          :text="'Nový post'"
-          custom-class="btn--primary"
-          @click="goToCreate"
-        />
-        <BaseButton
-          :text="'Spravovat tagy'"
-          custom-class="btn--primary-outlined"
-          @click="goToTags"
-        />
-      </div>
+      <BaseButton
+        :text="'Nový tag'"
+        custom-class="btn--primary"
+        @click="goToCreate"
+      />
     </template>
   </TitleHeader>
-
-  <h2 v-if="blogs.tag.id" class="results">
-    Výsledky vyhledávaní pro tag <span class="tag">#{{ blogs.tag.name }}</span>
-    <span @click="clear" class="clear" />
-  </h2>
 
   <template v-if="status === 'loading'">
     <div class="spinner-box spinner-box--page">
@@ -29,22 +17,17 @@
   <template v-else-if="status === 'error'">
     <ErrorMessage />
   </template>
-  <template v-else-if="!blogs.items.length">
-    <ErrorMessage text="Nebyly nalezeny žádné posty." />
+  <template v-else-if="!tags.items.length">
+    <ErrorMessage text="Nebyly nalezeny žádné tagy." />
   </template>
   <template v-else>
-    <div class="posts">
-      <BlogPost
-        v-for="article in blogs.items"
-        :key="article.id"
-        :item="article"
-      />
-    </div>
+    <h2 class="h h--secondary mb-5">Upravit tag:</h2>
+    <PostTags :tags="tags.items" @click="editTag($event.id)" />
   </template>
 </template>
 
 <script>
-import { useBlogsStore } from "@/stores/blogs";
+import { useTagsStore } from "@/stores/tags";
 import { defineAsyncComponent } from "vue";
 
 const TitleHeader = defineAsyncComponent(() =>
@@ -53,22 +36,22 @@ const TitleHeader = defineAsyncComponent(() =>
 const BaseButton = defineAsyncComponent(() =>
   import("@/components/ui/BaseButton.vue")
 );
-const BlogPost = defineAsyncComponent(() =>
-  import("@/components/posts/BlogPost.vue")
-);
 const Spinner = defineAsyncComponent(() =>
   import("@/components/ui/Spinner.vue")
 );
 const ErrorMessage = defineAsyncComponent(() =>
   import("@/components/ui/ErrorMessage.vue")
 );
+const PostTags = defineAsyncComponent(() =>
+  import("@/components/ui/PostTags.vue")
+);
 
 export default {
-  components: { TitleHeader, BaseButton, BlogPost, Spinner, ErrorMessage },
+  components: { PostTags, TitleHeader, BaseButton, Spinner, ErrorMessage },
   setup() {
-    const blogs = useBlogsStore();
+    const tags = useTagsStore();
 
-    return { blogs };
+    return { tags };
   },
 
   data() {
@@ -79,33 +62,29 @@ export default {
 
   created() {
     this.status = "loading";
-    this.blogs
+    this.tags
       .fetchAllItems()
-      .then(() => {
-        if (this.blogs.tag.id) {
-          this.blogs.searchByTag();
-        }
-        this.status = "success";
-      })
+      .then(() => (this.status = "success"))
       .catch(() => (this.status = "error"));
   },
 
   methods: {
+    filter(tag) {
+      Object.assign(this.blogs.tag, tag);
+      this.$router.push({ name: "blog" });
+    },
+
     goToCreate() {
-      this.$router.push({ name: "blog-create" });
+      this.$router.push({ name: "tag-create" });
     },
 
-    goToTags() {
-      this.$router.push({ name: "tags" });
-    },
-
-    clear() {
-      this.blogs.tag = {};
-      this.status = "loading";
-      this.blogs
-        .fetchAllItems()
-        .then(() => (this.status = "success"))
-        .catch(() => (this.status = "error"));
+    editTag(id) {
+      this.$router.push({
+        name: "tag-detail",
+        params: {
+          idTag: id,
+        },
+      });
     },
   },
 };

@@ -1,19 +1,17 @@
 import { defineStore } from "pinia";
 import { HttpClient } from "@/common/http/http-client";
 
-export const useBlogsStore = defineStore("blogs", {
+export const useTagsStore = defineStore("tags", {
   state: () => {
     return {
       items: [],
       itemToEdit: null,
-      tag: {},
-      tagsReload: false,
     };
   },
   actions: {
     fetchAllItems() {
       return new Promise((resolve, reject) => {
-        HttpClient.get(`/blog`)
+        HttpClient.get(`/tag`)
           .then((response) => {
             this.items = response.data;
             resolve(response.data);
@@ -26,7 +24,7 @@ export const useBlogsStore = defineStore("blogs", {
 
     fetchItem(id) {
       return new Promise((resolve, reject) => {
-        HttpClient.get(`/blog/${id}`)
+        HttpClient.get(`/tag/${id}`)
           .then((response) => {
             const data = response.data;
             const indexOfItem = this.items.findIndex((item) => item.id === id);
@@ -46,7 +44,7 @@ export const useBlogsStore = defineStore("blogs", {
 
     updateItem(id, data) {
       return new Promise((resolve, reject) => {
-        HttpClient.put(`/blog/${id}`, data)
+        HttpClient.put(`/tag/${id}`, data)
           .then((response) => {
             const data = response.data;
             this.itemToEdit = data;
@@ -66,49 +64,11 @@ export const useBlogsStore = defineStore("blogs", {
 
     createItem(data) {
       return new Promise((resolve, reject) => {
-        HttpClient.post(`/blog`, data)
+        HttpClient.post(`/tag`, data)
           .then((response) => {
             const data = response.data;
             this.items.push(data);
             resolve(data);
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      });
-    },
-
-    searchByTag() {
-      return new Promise((resolve, reject) => {
-        HttpClient.get(`/blog/?tags=${this.tag.id}`)
-          .then((response) => {
-            this.items = response.data;
-            resolve(response.data);
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      });
-    },
-
-    addTag(blogId, tagId) {
-      return new Promise((resolve, reject) => {
-        HttpClient.put(`/blog/${blogId}/add_tag/${tagId}`, {
-          id: blogId,
-          tag_pk: tagId,
-        })
-          .then((response) => {
-            const data = response.data;
-            this.itemToEdit = data;
-            const indexOfItem = this.items.findIndex(
-              (item) => item.id === blogId
-            );
-            if (indexOfItem < 0) {
-              this.items.push(data);
-            } else {
-              this.items[indexOfItem] = data;
-            }
-            resolve(this.itemToEdit);
           })
           .catch((error) => {
             reject(error);

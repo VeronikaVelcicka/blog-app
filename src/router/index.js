@@ -23,6 +23,21 @@ const router = createRouter({
       component: () => import("@/views/PostCreate.vue"),
     },
     {
+      path: "/tag",
+      name: "tags",
+      component: () => import("@/views/Tags.vue"),
+    },
+    {
+      path: "/tag/:idTag",
+      name: "tag-detail",
+      component: () => import("@/views/TagEdit.vue"),
+    },
+    {
+      path: "/tag/create",
+      name: "tag-create",
+      component: () => import("@/views/TagCreate.vue"),
+    },
+    {
       path: "/404",
       name: "not-found",
       meta: {

@@ -2,6 +2,7 @@
   <div class="input">
     <label v-if="$attrs.title" for="" class="input__label">
       {{ $attrs.title }}
+      <span v-if="required" class="input__required">*</span>
     </label>
     <div class="position-relative">
       <button class="input__field" @click="showOptions = !showOptions">
@@ -179,6 +180,10 @@ export default {
 
 .input__item--selected {
   background-color: rgba(238, 238, 238, 0.4);
+}
+
+.input__required {
+  color: red;
 }
 
 .error {
