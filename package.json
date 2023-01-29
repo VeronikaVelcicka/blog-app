@@ -12,6 +12,7 @@
     "stylelint": "stylelint src/**/*.{vue,scss} --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "axios": "^1.2.5",
     "pinia": "^2.0.28",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
