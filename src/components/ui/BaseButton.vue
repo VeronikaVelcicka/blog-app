@@ -99,6 +99,14 @@ export default {
   }
 }
 
+.btn--active {
+  &:disabled {
+    color: $c-blank;
+    border-color: $c-primary;
+    background-color: $c-primary;
+  }
+}
+
 .article:hover .btn--primary-outlined {
   color: $c-blank;
   background-color: $c-primary;

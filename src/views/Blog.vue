@@ -49,11 +49,17 @@
   <template v-else>
     <div class="posts">
       <BlogPost
-        v-for="article in blogs.items"
+        v-for="article in paginatedBlogs"
         :key="article.id"
         :item="article"
       />
     </div>
+    <Pagination
+      :total-pages="totalPages"
+      :total="blogs.items.length"
+      :current-page="currentPage"
+      @pagechanged="onPageChange"
+    />
   </template>
 </template>
 
@@ -76,9 +82,19 @@ const Spinner = defineAsyncComponent(() =>
 const ErrorMessage = defineAsyncComponent(() =>
   import("@/components/ui/ErrorMessage.vue")
 );
+const Pagination = defineAsyncComponent(() =>
+  import("@/components/ui/Pagination.vue")
+);
 
 export default {
-  components: { TitleHeader, BaseButton, BlogPost, Spinner, ErrorMessage },
+  components: {
+    TitleHeader,
+    BaseButton,
+    BlogPost,
+    Spinner,
+    ErrorMessage,
+    Pagination,
+  },
   setup() {
     const blogs = useBlogsStore();
 
@@ -88,7 +104,27 @@ export default {
   data() {
     return {
       status: "",
+      currentPage: 1,
+      perPage: 5,
     };
+  },
+
+  computed: {
+    totalPages() {
+      return Math.ceil(this.blogs.items.length / this.perPage);
+    },
+
+    paginatedBlogs() {
+      if (this.currentPage === 1) {
+        const from = this.currentPage - 1;
+        const to = this.perPage;
+        return this.blogs.items.slice(from, to);
+      } else if (this.currentPage > 1) {
+        const from = (this.currentPage - 1) * this.perPage;
+        const to = this.perPage * this.currentPage;
+        return this.blogs.items.slice(from, to);
+      } else return this.blogs.items;
+    },
   },
 
   created() {
@@ -120,6 +156,10 @@ export default {
         .fetchAllItems()
         .then(() => (this.status = "success"))
         .catch(() => (this.status = "error"));
+    },
+
+    onPageChange(page) {
+      this.currentPage = page;
     },
   },
 };

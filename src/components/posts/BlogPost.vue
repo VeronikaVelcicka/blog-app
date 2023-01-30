@@ -2,11 +2,13 @@
   <div class="article">
     <img :src="item.thumbnail" class="article__thumb" :alt="item.title" />
     <div class="article__text-box">
-      <h2 class="article__title">
-        {{ item.title }}
-      </h2>
-      <PostTags :tags="blogTags" @click="filter($event)" />
-      <p class="article__subtitle">{{ item.detail }}</p>
+      <div>
+        <h2 class="article__title">
+          {{ item.title }}
+        </h2>
+        <PostTags :tags="blogTags" @click="filter($event)" />
+        <p class="article__subtitle">{{ item.detail }}</p>
+      </div>
       <div class="text-center">
         <BaseButton
           :text="'Přečíst'"
