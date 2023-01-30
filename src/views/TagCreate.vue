@@ -1,4 +1,5 @@
 <template>
+  <BackLink route-name="tags" />
   <TagForm />
 </template>
 
@@ -8,9 +9,12 @@ import { defineAsyncComponent } from "vue";
 const TagForm = defineAsyncComponent(() =>
   import("@/components/tags/TagForm.vue")
 );
+const BackLink = defineAsyncComponent(() =>
+  import("@/components/ui/BackLink.vue")
+);
 
 export default {
-  components: { TagForm },
+  components: { TagForm, BackLink },
 };
 </script>
 

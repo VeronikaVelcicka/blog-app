@@ -1,4 +1,5 @@
 <template>
+  <BackLink route-name="blog" />
   <TitleHeader title="Tagy">
     <template #button>
       <BaseButton
@@ -52,9 +53,19 @@ const ErrorMessage = defineAsyncComponent(() =>
 const PostTags = defineAsyncComponent(() =>
   import("@/components/ui/PostTags.vue")
 );
+const BackLink = defineAsyncComponent(() =>
+  import("@/components/ui/BackLink.vue")
+);
 
 export default {
-  components: { PostTags, TitleHeader, BaseButton, Spinner, ErrorMessage },
+  components: {
+    PostTags,
+    TitleHeader,
+    BaseButton,
+    Spinner,
+    ErrorMessage,
+    BackLink,
+  },
   setup() {
     const tags = useTagsStore();
 

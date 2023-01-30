@@ -1,4 +1,5 @@
 <template>
+  <BackLink route-name="blog" />
   <PostForm v-if="isEdit" />
   <template v-else>
     <template v-if="status === 'loading'">
@@ -67,6 +68,9 @@ const BaseButton = defineAsyncComponent(() =>
 const PostTags = defineAsyncComponent(() =>
   import("@/components/ui/PostTags.vue")
 );
+const BackLink = defineAsyncComponent(() =>
+  import("@/components/ui/BackLink.vue")
+);
 
 export default {
   components: {
@@ -76,6 +80,7 @@ export default {
     Spinner,
     ErrorMessage,
     PostTags,
+    BackLink,
   },
 
   setup() {
