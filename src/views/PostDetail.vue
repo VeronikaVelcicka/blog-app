@@ -13,17 +13,19 @@
     <template v-else>
       <TitleHeader :title="blogs.itemToEdit.title">
         <template #button>
-          <BaseButton
-            text="Upravit"
-            custom-class="btn--primary-outlined"
-            :use-icon="true"
-            @click="isEdit = true"
-          >
-            <template #ico>
-              <!-- eslint-disable -->
-              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="m9.328 2.527 3.05 3.051-7.722 7.727-3.05-3.055Zm5.367-.734L13.332.43a1.353 1.353 0 0 0-1.906 0L10.12 1.734l3.05 3.051 1.524-1.52a1.042 1.042 0 0 0 0-1.472ZM.008 14.539a.349.349 0 0 0 .422.414l3.398-.824-3.05-3.05Zm0 0" style="stroke:none;fill-rule:nonzero;fill:currentColor;fill-opacity:1"/></svg>              <!-- eslint-enable -->
-            </template>
-          </BaseButton>
+          <div class="btns">
+            <BaseButton
+              text="Upravit"
+              custom-class="btn--primary-outlined"
+              :use-icon="true"
+              @click="isEdit = true"
+            >
+              <template #ico>
+                <!-- eslint-disable -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="m9.328 2.527 3.05 3.051-7.722 7.727-3.05-3.055Zm5.367-.734L13.332.43a1.353 1.353 0 0 0-1.906 0L10.12 1.734l3.05 3.051 1.524-1.52a1.042 1.042 0 0 0 0-1.472ZM.008 14.539a.349.349 0 0 0 .422.414l3.398-.824-3.05-3.05Zm0 0" style="stroke:none;fill-rule:nonzero;fill:currentColor;fill-opacity:1"/></svg>              <!-- eslint-enable -->
+              </template>
+            </BaseButton>
+          </div>
         </template>
       </TitleHeader>
 
@@ -126,17 +128,36 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.btns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  @include more-than(sm) {
+    margin-top: 0;
+  }
+}
+
 .detail {
   display: grid;
-  grid-template-columns: calc(60% - 1.5rem) calc(40% - 1.5rem);
   column-gap: 3rem;
   margin-top: 6rem;
+
+  @include more-than(lg) {
+    grid-template-columns: calc(60% - 1.5rem) calc(40% - 1.5rem);
+  }
 }
 
 .detail__text {
-  margin-top: 4rem;
+  margin: 4rem 0;
   font-size: 2rem;
   line-height: 3rem;
+
+  @include more-than(lg) {
+    margin-bottom: 0;
+  }
 }
 
 .detail__image {

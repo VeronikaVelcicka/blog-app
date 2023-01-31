@@ -1,6 +1,10 @@
 <template>
   <TitleHeader :title="getTitle" />
-  <PostTags :tags="activeTags" @click="filter($event)" />
+  <PostTags
+    v-if="activeTags.length"
+    :tags="activeTags"
+    @click="filter($event)"
+  />
   <div class="form">
     <div class="form__item">
       <BaseInput
@@ -310,8 +314,8 @@ export default {
 }
 
 .form__item {
-  flex: 0 0 100%;
-  max-width: 100%;
+  flex: 0 0 calc(100% - 3rem);
+  max-width: calc(100% - 3rem);
   padding: 0 1.5rem;
   margin-bottom: 2rem;
 
@@ -332,7 +336,6 @@ export default {
 .form__image {
   margin-top: 2rem;
   width: 100%;
-  height: 100%;
   max-height: 30rem;
   object-fit: cover;
 }

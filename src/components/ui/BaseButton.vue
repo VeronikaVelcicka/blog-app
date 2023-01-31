@@ -51,15 +51,27 @@ export default {
 .btn {
   display: inline-flex;
   align-items: center;
-  padding: 1.5rem 3rem;
-  font-size: 1.5rem;
-  line-height: 1.7rem;
+  padding: 1rem 1.5rem;
+  font-size: 1.3rem;
+  line-height: 1.5rem;
   color: $c-text;
   border: 2px solid transparent;
   border-radius: 5px;
   background-color: transparent;
   cursor: pointer;
   transition: color 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
+
+  @include more-than(md) {
+    padding: 1.3rem 2.4rem;
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+  }
+
+  @include more-than(xl) {
+    padding: 1.5rem 3rem;
+    font-size: 1.5rem;
+    line-height: 1.7rem;
+  }
 
   &:hover {
     color: $c-text;
@@ -103,6 +115,10 @@ export default {
   &:disabled {
     color: $c-blank;
     border-color: $c-primary;
+    background-color: $c-primary;
+  }
+
+  &:hover:disabled {
     background-color: $c-primary;
   }
 }

@@ -16,7 +16,7 @@ export default {
   props: {
     tags: {
       type: Array,
-      default: [],
+      default: () => [],
       required: true,
     },
   },
@@ -36,8 +36,12 @@ export default {
   border: 1px solid $c-primary;
   border-radius: 10rem;
   color: $c-blank;
-  padding: 0.5rem 2rem;
+  padding: 0.3rem 1rem;
   transition: color 0.2s ease, background-color 0.2s ease;
+
+  @include more-than(sm) {
+    padding: 0.5rem 2rem;
+  }
 
   &:hover {
     color: $c-primary;

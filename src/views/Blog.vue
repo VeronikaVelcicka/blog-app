@@ -1,7 +1,7 @@
 <template>
   <TitleHeader title="Blog">
     <template #button>
-      <div class="d-flex gap-1">
+      <div class="btns">
         <BaseButton
           :text="'Nový post'"
           custom-class="btn--primary"
@@ -166,6 +166,18 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.btns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  @include more-than(sm) {
+    margin-top: 0;
+  }
+}
+
 .posts {
   display: flex;
   flex-wrap: wrap;
@@ -175,6 +187,7 @@ export default {
 .results {
   margin-bottom: 3rem;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   column-gap: 1rem;
 }
